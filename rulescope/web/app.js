@@ -51,7 +51,7 @@
     const rows = filteredRules();
     const tbody = $("rules-tbody");
     if (!rows.length) {
-      tbody.innerHTML = `<tr><td colspan="7" class="empty">No rules match the current filters.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="empty">No rules match the current filters.</td></tr>`;
       return;
     }
     tbody.innerHTML = rows
@@ -60,6 +60,7 @@
         const cves = (r.cves || [])
           .map((c) => `<a class="mono" href="https://nvd.nist.gov/vuln/detail/${c}" target="_blank" rel="noreferrer">${c}</a>`)
           .join(" ") || "—";
+        const mitre = (r.mitre || []).slice(0, 3).map(escapeHtml).join(", ") || "—";
         const outdated = r.outdated ? `<div class="outdated">outdated?</div>` : "";
         return `<tr>
           <td class="mono">${r.sid}</td>
@@ -67,6 +68,7 @@
           <td><span class="pill sev-${r.severity}">${r.severity}</span></td>
           <td><span class="pill rel-${r.relevance_label}">${r.relevance_label} ${r.relevance_score}</span></td>
           <td>${(r.platforms || []).join(", ") || "—"}</td>
+          <td class="mono">${mitre}</td>
           <td>${cves}</td>
           <td class="mono">${age}</td>
         </tr>`;

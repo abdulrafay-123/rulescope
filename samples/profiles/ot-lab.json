@@ -1,0 +1,8 @@
+{
+  "name": "ot-lab",
+  "platforms": ["linux", "scada", "network"],
+  "services": ["http", "modbus", "dns"],
+  "roles": ["internal"],
+  "exclude_platforms": ["ios", "android"],
+  "exclude_services": ["rdp"]
+}
