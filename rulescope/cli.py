@@ -12,6 +12,7 @@ import uvicorn
 from rulescope.diff import diff_rulesets
 from rulescope.eve import correlate_alerts, parse_eve_file
 from rulescope.pipeline import analyze_to_dict, build_catalog, load_profile, make_disable_conf, make_enable_conf
+from rulescope.store import catalog_summary, index_catalog, query_catalog
 
 app = typer.Typer(
     name="rulescope",
@@ -82,6 +83,34 @@ def diff(
     if output:
         output.write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
         typer.echo(f"Wrote {output}")
+
+
+@app.command()
+def index(
+    rules: Path = typer.Argument(..., help="Rules file or directory"),
+    db: Path = typer.Option(Path("rulescope.db"), "--db", help="SQLite catalog path"),
+    profile: Optional[Path] = typer.Option(None, "--profile", "-p"),
+) -> None:
+    """Index an enriched/scored catalog into SQLite for fast querying."""
+    summary = index_catalog(db, [rules], load_profile(profile))
+    typer.echo(f"Indexed {summary['total_rules']} rules into {db}")
+
+
+@app.command()
+def query(
+    db: Path = typer.Option(Path("rulescope.db"), "--db"),
+    q: Optional[str] = typer.Option(None, "--q", help="Search msg/SID/CVE"),
+    severity: Optional[str] = typer.Option(None, "--severity"),
+    relevance: Optional[str] = typer.Option(None, "--relevance"),
+    limit: int = typer.Option(20, "--limit"),
+) -> None:
+    """Query a previously indexed SQLite catalog."""
+    summary = catalog_summary(db)
+    typer.echo(f"Catalog rows: {summary.get('indexed_rows', summary.get('total_rules', 0))}")
+    for rule in query_catalog(db, q=q, severity=severity, relevance=relevance, limit=limit):
+        typer.echo(
+            f"{rule.sid} [{rule.severity}/{rule.relevance_label} {rule.relevance_score}] {rule.msg}"
+        )
 
 
 @app.command()

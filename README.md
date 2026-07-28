@@ -74,6 +74,10 @@ rulescope export-disable samples/rules/demo.rules --profile samples/profiles/hom
 # Diff two rulesets after an update
 rulescope diff old.rules new.rules -o diff.json
 
+# Index large rulesets into SQLite, then query
+rulescope index samples/rules/demo.rules --profile samples/profiles/homelab.json --db rulescope.db
+rulescope query --db rulescope.db --q CVE --relevance high
+
 # Correlate EVE alerts
 rulescope eve samples/eve/eve-alerts.json --rules samples/rules/demo.rules
 ```

@@ -63,3 +63,17 @@ def test_ruleset_diff_detects_changes():
     assert result.to_dict()["summary"]["added"] == 1
     assert result.to_dict()["summary"]["removed"] == 1
     assert result.to_dict()["summary"]["changed"] >= 1
+
+
+def test_sqlite_index_and_query(tmp_path):
+    from rulescope.store import catalog_summary, index_catalog, query_catalog
+
+    db = tmp_path / "rulescope.db"
+    summary = index_catalog(db, [RULES], load_profile(PROFILE))
+    assert summary["total_rules"] >= 8
+    assert catalog_summary(db)["indexed_rows"] >= 8
+    hits = query_catalog(db, q="CVE-2021", limit=10)
+    assert hits
+    assert any("CVE-2021-41773" in r.cves for r in hits)
+    noise = query_catalog(db, relevance="noise", limit=20)
+    assert isinstance(noise, list)

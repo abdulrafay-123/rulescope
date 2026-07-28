@@ -10,14 +10,15 @@
 - [x] `disable.conf` / `enable.conf` export
 - [x] Demo samples + tests + Docker
 - [x] Ruleset diff (`rulescope diff`) for post-update hygiene
+- [x] Persist catalogs in SQLite (`rulescope index` / `query`)
 
 ## v0.2
 
 - [ ] Bulk import Emerging Threats Open / custom rules directories with progress
-- [ ] Persist catalogs in SQLite for large rulesets (100k+ SIDs)
 - [ ] OPNsense policy export helpers
 - [ ] Better MITRE ATT&CK technique name resolution
 - [ ] Web UI for ruleset diff
+- [ ] Streaming index progress for 100k+ SID imports
 
 ## v0.3
 
