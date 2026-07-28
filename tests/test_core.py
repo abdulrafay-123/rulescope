@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from rulescope.diff import diff_rulesets
 from rulescope.eve import correlate_alerts, parse_eve_file
 from rulescope.pipeline import build_catalog, load_profile, make_disable_conf
 from rulescope.parser import parse_rules_file
@@ -46,3 +47,19 @@ def test_eve_correlation():
     mapped = [v for v in views if v.rule is not None]
     assert len(mapped) == 4
     assert mapped[0].rule.cves
+
+
+def test_ruleset_diff_detects_changes():
+    old, _ = build_catalog([RULES])
+    new = [r.model_copy(deep=True) for r in old]
+    new[0].rev += 1
+    new[0].msg = new[0].msg + " (tuned)"
+    removed = new.pop()
+    added = removed.model_copy(deep=True)
+    added.sid = 209999999
+    added.msg = "NEW RULE"
+    new.append(added)
+    result = diff_rulesets(old, new)
+    assert result.to_dict()["summary"]["added"] == 1
+    assert result.to_dict()["summary"]["removed"] == 1
+    assert result.to_dict()["summary"]["changed"] >= 1

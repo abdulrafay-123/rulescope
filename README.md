@@ -71,6 +71,9 @@ rulescope analyze samples/rules/demo.rules --profile samples/profiles/homelab.js
 # Export disable candidates (low relevance / noise)
 rulescope export-disable samples/rules/demo.rules --profile samples/profiles/homelab.json -o disable.conf
 
+# Diff two rulesets after an update
+rulescope diff old.rules new.rules -o diff.json
+
 # Correlate EVE alerts
 rulescope eve samples/eve/eve-alerts.json --rules samples/rules/demo.rules
 ```

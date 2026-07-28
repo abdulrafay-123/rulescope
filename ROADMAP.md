@@ -9,6 +9,7 @@
 - [x] EVE alert correlation
 - [x] `disable.conf` / `enable.conf` export
 - [x] Demo samples + tests + Docker
+- [x] Ruleset diff (`rulescope diff`) for post-update hygiene
 
 ## v0.2
 
@@ -16,7 +17,7 @@
 - [ ] Persist catalogs in SQLite for large rulesets (100k+ SIDs)
 - [ ] OPNsense policy export helpers
 - [ ] Better MITRE ATT&CK technique name resolution
-- [ ] Diff two rulesets / show what changed after `suricata-update`
+- [ ] Web UI for ruleset diff
 
 ## v0.3
 

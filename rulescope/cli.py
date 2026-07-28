@@ -9,6 +9,7 @@ from typing import Optional
 import typer
 import uvicorn
 
+from rulescope.diff import diff_rulesets
 from rulescope.eve import correlate_alerts, parse_eve_file
 from rulescope.pipeline import analyze_to_dict, build_catalog, load_profile, make_disable_conf, make_enable_conf
 
@@ -61,6 +62,26 @@ def export_enable(
     text = make_enable_conf([rules], load_profile(profile), min_score=min_score)
     output.write_text(text, encoding="utf-8")
     typer.echo(f"Wrote {output}")
+
+
+@app.command()
+def diff(
+    old_rules: Path = typer.Argument(..., help="Previous rules file/dir"),
+    new_rules: Path = typer.Argument(..., help="New rules file/dir"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o"),
+) -> None:
+    """Compare two rulesets by SID (added / removed / changed)."""
+    old, _ = build_catalog([old_rules])
+    new, _ = build_catalog([new_rules])
+    result = diff_rulesets(old, new)
+    summary = result.to_dict()["summary"]
+    typer.echo(
+        f"Added: {summary['added']} | Removed: {summary['removed']} | "
+        f"Changed: {summary['changed']} | Unchanged: {summary['unchanged']}"
+    )
+    if output:
+        output.write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
+        typer.echo(f"Wrote {output}")
 
 
 @app.command()
