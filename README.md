@@ -78,6 +78,9 @@ rulescope diff old.rules new.rules -o diff.json
 rulescope index samples/rules/demo.rules --profile samples/profiles/homelab.json --db rulescope.db
 rulescope query --db rulescope.db --q CVE --relevance high
 
+# OPNsense-oriented exports (CSV + JSON + disable.conf)
+rulescope export-opnsense samples/rules/demo.rules --profile samples/profiles/homelab.json -o ./opnsense-out
+
 # Correlate EVE alerts
 rulescope eve samples/eve/eve-alerts.json --rules samples/rules/demo.rules
 ```

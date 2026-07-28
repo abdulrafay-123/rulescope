@@ -11,11 +11,11 @@
 - [x] Demo samples + tests + Docker
 - [x] Ruleset diff (`rulescope diff`) for post-update hygiene
 - [x] Persist catalogs in SQLite (`rulescope index` / `query`)
+- [x] OPNsense policy export helpers (`rulescope export-opnsense`)
 
 ## v0.2
 
 - [ ] Bulk import Emerging Threats Open / custom rules directories with progress
-- [ ] OPNsense policy export helpers
 - [ ] Better MITRE ATT&CK technique name resolution
 - [ ] Web UI for ruleset diff
 - [ ] Streaming index progress for 100k+ SID imports

@@ -11,7 +11,10 @@ import uvicorn
 
 from rulescope.diff import diff_rulesets
 from rulescope.eve import correlate_alerts, parse_eve_file
+from rulescope.export import render_disable_conf
+from rulescope.opnsense import render_opnsense_csv, render_opnsense_policy_json
 from rulescope.pipeline import analyze_to_dict, build_catalog, load_profile, make_disable_conf, make_enable_conf
+from rulescope.relevance import disable_candidates
 from rulescope.store import catalog_summary, index_catalog, query_catalog
 
 app = typer.Typer(
@@ -83,6 +86,33 @@ def diff(
     if output:
         output.write_text(json.dumps(result.to_dict(), indent=2), encoding="utf-8")
         typer.echo(f"Wrote {output}")
+
+
+@app.command("export-opnsense")
+def export_opnsense(
+    rules: Path = typer.Argument(...),
+    profile: Optional[Path] = typer.Option(None, "--profile", "-p"),
+    outdir: Path = typer.Option(Path("opnsense-out"), "--outdir", "-o"),
+    max_score: float = typer.Option(30.0, "--max-score"),
+) -> None:
+    """Export OPNsense-oriented policy helpers (CSV, JSON, disable.conf)."""
+    catalog, _ = build_catalog([rules], load_profile(profile))
+    outdir.mkdir(parents=True, exist_ok=True)
+    disable_path = outdir / "disable.conf"
+    csv_path = outdir / "opnsense-review.csv"
+    json_path = outdir / "opnsense-policy.json"
+    disable_path.write_text(
+        render_disable_conf(disable_candidates(catalog, max_score=max_score)),
+        encoding="utf-8",
+    )
+    csv_path.write_text(render_opnsense_csv(catalog, max_disable_score=max_score), encoding="utf-8")
+    json_path.write_text(
+        render_opnsense_policy_json(catalog, max_disable_score=max_score),
+        encoding="utf-8",
+    )
+    typer.echo(f"Wrote {disable_path}")
+    typer.echo(f"Wrote {csv_path}")
+    typer.echo(f"Wrote {json_path}")
 
 
 @app.command()

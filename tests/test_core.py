@@ -77,3 +77,15 @@ def test_sqlite_index_and_query(tmp_path):
     assert any("CVE-2021-41773" in r.cves for r in hits)
     noise = query_catalog(db, relevance="noise", limit=20)
     assert isinstance(noise, list)
+
+
+def test_opnsense_exports():
+    from rulescope.opnsense import render_opnsense_csv, render_opnsense_policy_json
+
+    rules, _ = build_catalog([RULES], load_profile(PROFILE))
+    csv_text = render_opnsense_csv(rules)
+    assert "recommended_action" in csv_text
+    assert "202141773" in csv_text
+    policy = render_opnsense_policy_json(rules)
+    assert '"disable_sids"' in policy
+    assert '"keep_sids"' in policy
