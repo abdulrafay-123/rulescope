@@ -1,0 +1,8 @@
+{
+  "name": "homelab",
+  "platforms": ["linux", "windows"],
+  "services": ["http", "dns", "tls", "ssh", "smb"],
+  "roles": ["perimeter", "internal"],
+  "exclude_platforms": ["ios", "android", "scada"],
+  "exclude_services": []
+}

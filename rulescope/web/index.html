@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RuleScope — Suricata Ruleset Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="bg"></div>
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <h1>RuleScope</h1>
+        <p>Open-source Suricata ruleset intelligence</p>
+      </div>
+    </div>
+    <nav>
+      <a href="https://github.com/abdulrafay-123/rulescope" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="/docs/openapi" id="api-link" hidden>API</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="lede">
+        Suricata is powerful. SID lists are not. RuleScope enriches rules with CVE, severity, and age,
+        then scores whether they actually apply to <em>your</em> network — and exports
+        <code>disable.conf</code> for <code>suricata-update</code>.
+      </p>
+      <div class="stats" id="summary-stats">
+        <div><strong>—</strong><span>rules</span></div>
+        <div><strong>—</strong><span>with CVE</span></div>
+        <div><strong>—</strong><span>high+</span></div>
+        <div><strong>—</strong><span>noise/outdated</span></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Ruleset</h2>
+          <button type="button" class="ghost" id="load-sample-rules">Load demo</button>
+        </div>
+        <textarea id="rules-input" spellcheck="false" placeholder="Paste Suricata .rules here…"></textarea>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Asset profile</h2>
+          <button type="button" class="ghost" id="load-sample-profile">Load homelab</button>
+        </div>
+        <textarea id="profile-input" spellcheck="false"></textarea>
+        <div class="actions">
+          <button type="button" class="primary" id="analyze-btn">Analyze ruleset</button>
+          <button type="button" class="secondary" id="export-disable-btn">Export disable.conf</button>
+          <button type="button" class="secondary" id="export-enable-btn">Export enable.conf</button>
+        </div>
+        <p class="hint" id="status">Ready.</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Enriched catalog</h2>
+        <div class="filters">
+          <input type="search" id="filter-q" placeholder="Filter msg, CVE, SID…" />
+          <select id="filter-severity">
+            <option value="">All severities</option>
+            <option>critical</option>
+            <option>high</option>
+            <option>medium</option>
+            <option>low</option>
+            <option>info</option>
+            <option>unknown</option>
+          </select>
+          <select id="filter-relevance">
+            <option value="">All relevance</option>
+            <option>high</option>
+            <option>medium</option>
+            <option>low</option>
+            <option>noise</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>SID</th>
+              <th>Message</th>
+              <th>Severity</th>
+              <th>Relevance</th>
+              <th>Platforms</th>
+              <th>CVE</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody id="rules-tbody">
+            <tr><td colspan="7" class="empty">Load the demo or paste rules, then analyze.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>EVE alerts</h2>
+          <button type="button" class="ghost" id="load-sample-eve">Load sample alerts</button>
+        </div>
+        <textarea id="eve-input" spellcheck="false" placeholder="Paste eve.json / NDJSON…"></textarea>
+        <div class="actions">
+          <button type="button" class="primary" id="eve-btn">Correlate alerts</button>
+        </div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h2>Alert context</h2></div>
+        <div id="eve-results" class="eve-list">
+          <p class="empty">Correlated alerts appear here with relevance context.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel why">
+      <h2>Why RuleScope</h2>
+      <ul>
+        <li>Fills the OSS gap left by Suricata (no rule UX) and IDSTower (not open source).</li>
+        <li>Built around real forum requests: readable descriptions, CVE, severity, age, and network relevance.</li>
+        <li>Exports tuning decisions operators already use with <code>suricata-update</code>.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>MIT License · Built for the Suricata community</span>
+  </footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

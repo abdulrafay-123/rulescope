@@ -1,0 +1,25 @@
+# RuleScope demo ruleset — illustrative ET-style signatures for local testing
+# Not for production detection.
+
+alert http any any -> $HOME_NET any (msg:"ET EXPLOIT Possible Apache HTTP RCE CVE-2021-41773"; flow:established,to_server; http.uri; content:"/cgi-bin/.%2e/"; classtype:web-application-attack; reference:cve,2021-41773; reference:url,nvd.nist.gov; metadata:created_at 2021_10_05, updated_at 2024_03_12, signature_severity major, attack_target Server, mitre_technique_id T1190, deployment Perimeter; sid:202141773; rev:3;)
+
+alert http any any -> $HOME_NET any (msg:"ET EXPLOIT Oracle ctxsys SQL Injection attempt"; flow:to_server,established; content:"ctxsys.drvxtabc"; classtype:web-application-attack; reference:url,www.oracle.com; metadata:created_at 2010_06_01, updated_at 2012_01_15, former_category EXPLOIT; sid:2010375; rev:5;)
+
+alert smb any any -> $HOME_NET any (msg:"ET EXPLOIT EternalBlue SMB Shadow Broker probe CVE-2017-0144"; flow:to_server,established; content:"|FF|SMB"; classtype:attempted-admin; reference:cve,2017-0144; metadata:created_at 2017_04_14, updated_at 2023_11_02, signature_severity major, mitre_technique_id T1210, deployment Internal; sid:202017014; rev:8;)
+
+alert dns any any -> any any (msg:"ET MALWARE DNS Query to known C2 domain"; dns.query; content:"bad-c2.example"; classtype:domain-c2; metadata:created_at 2025_01_20, updated_at 2025_11_01, signature_severity major, mitre_tactic_id TA0011; sid:203000001; rev:1;)
+
+alert tcp any any -> $HOME_NET 22 (msg:"ET SCAN SSH Brute Force Attempt"; flow:to_server; threshold:type both, track by_src, count 10, seconds 60; classtype:attempted-user; metadata:created_at 2019_05_01, updated_at 2024_08_01, deployment Perimeter; sid:202200022; rev:4;)
+
+alert ip any any -> any any (msg:"ET POLICY Android Checkin to Google"; classtype:policy-violation; metadata:created_at 2014_02_10, updated_at 2016_07_01, former_category POLICY; sid:2014901; rev:2;)
+
+alert modbus any any -> $HOME_NET any (msg:"ET SCADA Modbus Write Multiple Registers"; classtype:bad-unknown; metadata:created_at 2015_03_03, updated_at 2018_09_09, attack_target SCADA; sid:202500100; rev:1;)
+
+# Disabled upstream example
+# alert icmp any any -> any any (msg:"ET INFO ICMP Echo Request"; classtype:icmp-event; metadata:created_at 2009_01_01, updated_at 2011_01_01; sid:2000001; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"ET INFO Outbound PDF download via HTTP"; flow:to_server,established; fileext:"pdf"; classtype:misc-activity; metadata:created_at 2020_04_04, updated_at 2022_04_04, signature_severity minor; sid:202004401; rev:2;)
+
+alert tls any any -> $EXTERNAL_NET any (msg:"ET JA3 Hash - Suspicious TLS Client"; ja3.hash; content:"e7d705a3286e19ea42f587b344ee6865"; classtype:trojan-activity; metadata:created_at 2024_06_01, updated_at 2025_02_14, signature_severity major; sid:204000010; rev:1;)
+
+alert tcp any any -> $HOME_NET 3389 (msg:"ET SCAN RDP Connection Attempt"; flow:to_server; classtype:attempted-admin; metadata:created_at 2018_08_08, updated_at 2024_01_01, deployment Internal; sid:202338901; rev:3;)

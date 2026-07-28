@@ -1,0 +1,76 @@
+[
+  {
+    "timestamp": "2026-07-27T18:01:11.123456+0000",
+    "event_type": "alert",
+    "src_ip": "203.0.113.50",
+    "src_port": 54321,
+    "dest_ip": "10.0.0.20",
+    "dest_port": 80,
+    "proto": "TCP",
+    "alert": {
+      "action": "allowed",
+      "gid": 1,
+      "signature_id": 202141773,
+      "rev": 3,
+      "signature": "ET EXPLOIT Possible Apache HTTP RCE CVE-2021-41773",
+      "category": "Web Application Attack",
+      "severity": 1
+    },
+    "http": {"hostname": "intranet.lab", "url": "/cgi-bin/.%2e/bin/sh", "http_method": "GET"}
+  },
+  {
+    "timestamp": "2026-07-27T18:05:44.000000+0000",
+    "event_type": "alert",
+    "src_ip": "10.0.0.55",
+    "src_port": 49112,
+    "dest_ip": "10.0.0.12",
+    "dest_port": 445,
+    "proto": "TCP",
+    "alert": {
+      "action": "allowed",
+      "gid": 1,
+      "signature_id": 202017014,
+      "rev": 8,
+      "signature": "ET EXPLOIT EternalBlue SMB Shadow Broker probe CVE-2017-0144",
+      "category": "Attempted Administrator Privilege Gain",
+      "severity": 1
+    }
+  },
+  {
+    "timestamp": "2026-07-27T18:10:02.000000+0000",
+    "event_type": "alert",
+    "src_ip": "10.0.0.9",
+    "src_port": 53001,
+    "dest_ip": "8.8.8.8",
+    "dest_port": 53,
+    "proto": "UDP",
+    "alert": {
+      "action": "allowed",
+      "gid": 1,
+      "signature_id": 203000001,
+      "rev": 1,
+      "signature": "ET MALWARE DNS Query to known C2 domain",
+      "category": "A Network Trojan was Detected",
+      "severity": 1
+    },
+    "dns": {"query": [{"rrname": "bad-c2.example", "rrtype": "A"}]}
+  },
+  {
+    "timestamp": "2026-07-27T18:12:30.000000+0000",
+    "event_type": "alert",
+    "src_ip": "10.0.0.40",
+    "src_port": 40111,
+    "dest_ip": "10.0.0.8",
+    "dest_port": 502,
+    "proto": "TCP",
+    "alert": {
+      "action": "allowed",
+      "gid": 1,
+      "signature_id": 202500100,
+      "rev": 1,
+      "signature": "ET SCADA Modbus Write Multiple Registers",
+      "category": "Potentially Bad Traffic",
+      "severity": 2
+    }
+  }
+]

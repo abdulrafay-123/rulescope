@@ -1,0 +1,8 @@
+services:
+  rulescope:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./samples:/app/samples:ro
+    restart: unless-stopped

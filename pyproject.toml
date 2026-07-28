@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rulescope"
+version = "0.1.0"
+description = "Open-source Suricata ruleset intelligence: enrichment, asset-aware relevance, and suricata-update exports"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "abdulrafay-123", email = "rafayfurqan@gmail.com" }]
+keywords = ["suricata", "ids", "ips", "nids", "rules", "security", "soc"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+]
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.32.0",
+  "typer>=0.12.0",
+  "pydantic>=2.9.0",
+  "python-multipart>=0.0.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3.0", "httpx>=0.27.0", "ruff>=0.7.0"]
+
+[project.scripts]
+rulescope = "rulescope.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/abdulrafay-123/rulescope"
+Issues = "https://github.com/abdulrafay-123/rulescope/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rulescope*"]
+
+[tool.setuptools.package-data]
+rulescope = ["web/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
